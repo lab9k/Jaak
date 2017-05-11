@@ -6,12 +6,12 @@ services:
       - redis
       - postgres
     environment: &environment
-      - TOKEN_APP_ID=0xabef46af49d19b4a5b72df60f8d24bfeae75ef29
-      - TOKEN_APP_PAYMENT_ADDRESS=0x37cebe2eb4f559d230e41a055f34de4f3d95a73b
-      - TOKEN_APP_USERNAME=wim
-      - TOKEN_APP_NAME=wim
-      - TOKEN_APP_AVATAR=wim
-      - TOKEN_APP_SEED=purse conduct salon valve assist action wrong salute depth confirm access runway
+      - TOKEN_APP_ID=0x534c3a4f2a9bb0a2d042bada822a81313b249442
+      - TOKEN_APP_PAYMENT_ADDRESS=0xeb42c517314cf1694db08e648ecd2ff8246ff99d
+      - TOKEN_APP_USERNAME=ParkingBot
+      - TOKEN_APP_NAME=ParkingBot
+      - TOKEN_APP_AVATAR=ParkingBot
+      - TOKEN_APP_SEED=napkin tuition upper afford lazy drift travel blush excite hope unaware cereal
       - REDIS_URL=redis://h:rlcMWNrxXgqS0xM8aWCYuE0R@redis:6379
       - DATABASE_URL=postgres://token:va5uOdJBqu2dZ1@postgres:5432/token
     volumes:
