@@ -1,0 +1,40 @@
+version: '2'
+services:
+  headless-client:
+    build: dependencies/headless-client
+    links:
+      - redis
+      - postgres
+    environment: &environment
+      - TOKEN_APP_ID=0xabef46af49d19b4a5b72df60f8d24bfeae75ef29
+      - TOKEN_APP_PAYMENT_ADDRESS=0x37cebe2eb4f559d230e41a055f34de4f3d95a73b
+      - TOKEN_APP_USERNAME=wim
+      - TOKEN_APP_NAME=wim
+      - TOKEN_APP_AVATAR=wim
+      - TOKEN_APP_SEED=purse conduct salon valve assist action wrong salute depth confirm access runway
+      - REDIS_URL=redis://h:rlcMWNrxXgqS0xM8aWCYuE0R@redis:6379
+      - DATABASE_URL=postgres://token:va5uOdJBqu2dZ1@postgres:5432/token
+    volumes:
+      - ./config/docker.yml:/usr/src/headless-client/config.yml
+      - ./attachments:/usr/src/headless-client/attachments
+  bot:
+    build: .
+    links:
+      - redis
+      - postgres
+    environment: *environment
+    volumes:
+      - ./config/docker.yml:/usr/src/bot/config.yml
+      - ./src:/usr/src/bot/src
+  redis:
+    build: dependencies/redis
+    ports:
+      - 6379
+  postgres:
+    image: postgres:9.6
+    ports:
+      - 15432
+    environment:
+      - POSTGRES_PASSWORD=va5uOdJBqu2dZ1
+      - POSTGRES_USER=token
+      - POSTGRES_DB=token
