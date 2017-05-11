@@ -3,7 +3,10 @@ const SOFA = require('sofa-js')
 const Fiat = require('./lib/Fiat')
 
 let bot = new Bot()
-// ROUTING
+var dictionary = {};
+
+
+
 
 bot.onEvent = function (session, message) {
     switch (message.type) {
@@ -26,36 +29,61 @@ bot.onEvent = function (session, message) {
 }
 
 function onMessage(session, message) {
-    if (message.body == `help`) {
-        var hulp = "Gebruik volgende commando's om tegen de bot te praten \n" + "1. \'plaats\': geeft vrije plaatsen"
-        sendMessage(session, hulp)
-    } else {
-        sendMessage(session, message.body)
-    }
+
+    console.log(session.data.address)
+    session.set('coins', 10);
+
 }
+
 
 function onCommand(session, command) {
     switch (command.content.value) {
-    case 'ping':
-        pong(session)
+    case 'geefPKP':
+        geefPKP(session)
         break
-    case 'count':
-        count(session)
+    case 'krijgPKP':
+        krijgPKP(session)
         break
-    case 'donate':
-        donate(session)
+    case 'checkCoins':
+        checkCoins(session)
         break
     }
 }
 
+function geefPKP(session) {
+
+    sendMessage(session, "Dankje voor je parkeerplaats, hier heb je een coin! :) ");
+    var blup = session.get('coins');
+    var aantalcoins = blup + 1;
+    session.set('coins', aantalcoins);
+}
+
+function krijgPKP(session) {
+
+    if (session.get('coins') > 0) {
+        var number = session.get('coins');
+        var coins = number - 1;
+        session.set('coins', coins);
+        sendMessage(session, "Hier is je pkp: 100");
+    } else sendMessage(session, "Onvoldoende Coins");
+}
+
+function checkCoins(session) {
+    sendMessage(session, "Aantal coins over: " + session.get('coins'))
+}
+
 function onPayment(session) {
-    sendMessage(session, `Thanks for the payment! 🙏`)
+    for (key in dictionary) {
+        console.log(key)
+        sendMessage(session, key + '')
+    }
 }
 
 // STATES
 
 function welcome(session) {
-    sendMessage(session, `Hallo Wim!`)
+
+    session.set('coins', 10);
 }
 
 function pong(session) {
@@ -75,25 +103,24 @@ function donate(session) {
         session.requestEth(toEth.USD(1))
     })
 }
-
 // HELPERS
 
 function sendMessage(session, message) {
     let controls = [
         {
             type: 'button',
-            label: 'Toon parkeerplaatsen',
-            value: 'ping'
+            label: 'Ik geef een PKP',
+            value: 'geefPKP'
         },
         {
             type: 'button',
-            label: 'Reserveer plekje',
-            value: 'count'
+            label: 'Geef mij een PKP',
+            value: 'krijgPKP'
         },
         {
             type: 'button',
-            label: 'Parkeerplaats afstaan',
-            value: 'donate'
+            label: 'check coins',
+            value: 'checkCoins'
         }
   ]
     session.reply(SOFA.Message({
@@ -101,4 +128,5 @@ function sendMessage(session, message) {
         controls: controls,
         showKeyboard: false,
     }))
+    console.log(dictionary)
 }
